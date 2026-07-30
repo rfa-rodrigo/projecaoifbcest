@@ -1,19 +1,13 @@
-/.claude
-/.claude (2)
-/01 - PPC EMI Mei.pdf
-/02 - PPC EMI Man.pdf
-/03 - PPC Sub.pdf
-/04 - PPC - EF.pdf
-/05 - PPC Mat.pdf
-/06 - PROEJA.pdf
-/07 - Esp.pdf
-/2026_1_v15_Professores.pdf
-/2026_2_v7_Professores.pdf
-/Projeções.xlsx
-/Questionamentos MEI
-/build_final.py
-/build_planilha.py
-/build_planilha_v2.py
-/disciplinas.csv
-/gerar_dashboard.py
-/professores.csv
+# Publica só o essencial: ignora tudo e libera explicitamente o que vai pro repo.
+# Vantagem: qualquer arquivo novo na pasta (PDF, rascunho, planilha) fica de fora
+# por padrão — não há risco de publicar algo sem querer.
+
+# ignora tudo na raiz
+/*
+
+# ...menos estes:
+!/.gitignore
+!/README.md
+!/index.html
+!/professores.csv
+!/disciplinas.csv

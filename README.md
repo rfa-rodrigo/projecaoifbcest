@@ -1,144 +1,128 @@
 # Projeção de Carga Horária Docente — IFB Campus Estrutural
 
-Painel para **planejar a lotação docente**: dada a grade de todos os cursos, mostra
-quanta aula cada área de conhecimento precisa entregar por semestre e se essa demanda
-cabe no número de professores que a área tem hoje.
+Esta é uma página de consulta para **planejar a lotação dos professores**. A partir das
+grades de todos os cursos do campus, ela mostra **quanta aula cada área de conhecimento
+precisa oferecer em cada semestre** e se essa demanda cabe no número de docentes que a
+área tem hoje.
 
-O painel é uma **página única e autocontida** (`index.html`): os dados vão embutidos e
-todo o cálculo roda no navegador — não há servidor nem dependências externas.
+Serve para responder perguntas como: *a carga da área está equilibrada entre os dois
+semestres? Alguma área está sobrecarregada? Uma mudança na grade de um curso pesa quanto
+sobre cada área?*
 
-**Página no ar:** https://rfa-rodrigo.github.io/projecaoifbcest/
-*(se não abrir, habilite o GitHub Pages em Settings → Pages → branch `master`, pasta `/root`).*
+👉 **Acesse a página:** https://rfa-rodrigo.github.io/projecaoifbcest/
 
----
-
-## Como usar a página
-
-### Abas
-- **Visão geral** — carga por área, carga por curso e a tabela de detalhamento.
-- **Consulta por curso** — a grade de um curso, disciplina a disciplina, por ano e semestre.
-
-### Filtro de cursos (Visão geral)
-No topo, o card **"Cursos no cálculo"** liga/desliga cada curso. Botões **Todos** / **Nenhum**
-para atalho.
-
-- Com o filtro ativo, as **cargas (hora-aula)** e o **gráfico por curso** consideram apenas
-  os cursos marcados.
-- A **média por docente** e a **situação** ficam **indisponíveis** nesse modo — de propósito:
-  o quadro de professores é do campus inteiro e não pode ser rateado por curso. Volte a marcar
-  **Todos** para reativá-las.
-
-### Métricas (botões acima do primeiro gráfico)
-- **Média por docente** — carga da área ÷ (docentes × semanas).
-- **Média c/ coordenação** — desconta as horas de quem coordena (ver fórmula abaixo).
-- **Carga total** — hora-aula por semestre, sem dividir por professor.
-
-### Outros controles
-- **Semanas** — base do cálculo semanal (16 a 20 semanas por semestre; padrão 20).
-- **Tema** — claro/escuro.
-- **🧪 Simular com seus dados** — clique em *Professores.csv* ou *Disciplinas.csv* para carregar
-  um CSV próprio e ver o resultado na hora, sem alterar nada online. **Restaurar originais** volta
-  ao estado inicial.
+A página abre direto no navegador (computador ou celular) e não precisa instalar nada.
 
 ---
 
-## Como ler os números
+## Navegando pela página
 
-| Termo | Cálculo |
+No alto há duas abas: **Visão geral** e **Consulta por curso**.
+
+### Aba "Visão geral"
+
+Mostra o retrato de todas as áreas de uma vez.
+
+- **Cursos no cálculo** — no topo, você pode ligar/desligar cada curso para ver a carga
+  apenas dos cursos que interessam (botões **Todos** / **Nenhum** para atalho).
+- **Três formas de ver a carga** (botões acima do primeiro gráfico):
+  - **Média por docente** — quantas horas de aula por semana cada professor da área teria.
+  - **Média c/ coordenação** — a mesma conta, descontando as horas de quem coordena.
+  - **Carga total** — o total de horas-aula da área no semestre, sem dividir por professor.
+- **Semanas** — no canto superior, ajusta a base de semanas letivas do semestre (padrão: 20).
+- **Gráfico por área** e **por curso** — barras do 1º semestre (azul) e do 2º (laranja).
+  Passe o mouse sobre uma barra para ver o detalhe.
+- **Tabela de detalhamento** — todas as áreas com suas médias, carga e a situação (ver adiante).
+
+### Aba "Consulta por curso"
+
+Escolha um curso no seletor **Curso:** e veja a grade dele, disciplina por disciplina,
+organizada por ano e semestre — com a carga horária e o número de professores de cada
+componente, além do total do curso.
+
+### Simular cenários (opcional)
+
+O painel **🧪 Simular com seus dados** permite testar hipóteses sem alterar a versão oficial:
+você carrega uma planilha própria e os gráficos se recalculam na hora, só no seu navegador.
+**Restaurar originais** volta aos dados atuais. *(O formato dos arquivos está no fim desta página.)*
+
+### Tema claro/escuro
+
+O botão **Tema** alterna a aparência.
+
+---
+
+## Como interpretar os números
+
+Toda a carga é medida em **hora-aula por semestre**. As contas são:
+
+| O que aparece | Como é calculado |
 |---|---|
-| **Carga** | Σ (CH × turmas × professores), por semestre — em hora-aula |
-| **Média por docente** | carga ÷ (docentes × semanas) ≈ horas de aula por semana por professor |
-| **Média c/ coordenação** | (carga − coordenadores × 8 × semanas) ÷ ((docentes − coordenadores) × semanas) |
+| **Carga** | carga horária da disciplina × nº de turmas × nº de professores |
+| **Média por docente** | carga da área ÷ (nº de docentes × nº de semanas) ≈ horas de aula por semana por professor |
+| **Média c/ coordenação** | a mesma média, descontando as horas de quem coordena (cada coordenador tem redução de 8 h/semana) |
 
-- Cada **coordenador** tem redução de **8 h/semana** de aula (constante `COORD_RED`).
-- **Tipo** da disciplina: *semestral* conta nos dois semestres; *anual* conta só no semestre indicado.
+Dois detalhes que afetam a leitura:
 
-### Situação (semáforo)
-- **Folga** — menor que 12 h/semana
-- **Adequado** — de 12 a 18 h/semana (inclusive nos dois limites)
-- **Sobrecarga** — maior que 18 h/semana
+- Disciplinas **anuais** entram no semestre indicado; disciplinas **semestrais** contam nos dois.
+- A **base de semanas** (16 a 20) pode ser ajustada no topo da Visão geral.
 
-A situação de cada área é definida pela **maior** média entre os dois semestres.
+### Situação de cada área (o "semáforo")
+
+Definida pela **maior** média entre os dois semestres:
+
+- 🟢 **Folga** — menos de 12 h/semana por docente
+- ⚪ **Adequado** — de 12 a 18 h/semana
+- 🔴 **Sobrecarga** — mais de 18 h/semana
 
 ---
 
-## Os dados de origem (ficam locais)
+## Observações importantes
 
-Dois CSVs alimentam o painel. Eles são **embutidos** no `index.html` na hora de gerar.
+- **Os dados são agregados.** A página trabalha com contagens (nº de docentes, turmas, carga
+  por área) — **não há nomes de professores** nem informações individuais.
+- **A classificação de áreas ainda está em refinamento.** Alguns componentes podem estar em
+  ajuste, então trate os números como uma **projeção de planejamento**, não como valor final.
+- **O filtro de cursos desativa as médias por docente.** Isso é proposital: o quadro de
+  professores é do campus inteiro e não pode ser dividido por um curso só. Ao filtrar cursos,
+  a página mostra as **cargas** (que fazem sentido por curso) e oculta as médias e a situação,
+  que só têm significado com todos os cursos somados.
 
-### `professores.csv` — quadro docente por área
-```
-area,docentes,coordenadores
-Matemática,14,1
-```
+---
+
+## Para quem quiser testar cenários próprios (Simular)
+
+O botão **Simular** aceita dois arquivos `.csv`. Dá para partir dos arquivos atuais, editar e
+recarregar.
+
+**`professores.csv`** — quadro docente por área:
+
 | Coluna | Significado |
 |---|---|
-| `area` | nome da área (chave que casa com a coluna `area` de `disciplinas.csv`) |
-| `docentes` | total de docentes da área no campus |
-| `coordenadores` | quantos desses são coordenadores (têm redução de aula) |
+| `area` | nome da área |
+| `docentes` | nº de docentes da área no campus |
+| `coordenadores` | quantos deles coordenam (têm redução de aula) |
 
-### `disciplinas.csv` — componentes curriculares de todos os cursos
-```
-curso,disciplina,area,ano,tipo,semestre,ch,turmas,professores
-Téc. Meio Ambiente (EMI),Ecologia Geral,Biologia,1,anual,1,60,2,1
-```
+**`disciplinas.csv`** — componentes de todos os cursos:
+
 | Coluna | Significado |
 |---|---|
-| `curso` | nome do curso (define a lista do filtro e da consulta por curso) |
+| `curso` | nome do curso |
 | `disciplina` | nome do componente |
-| `area` | área de conhecimento — **precisa bater exatamente** com uma `area` de `professores.csv` |
+| `area` | área de conhecimento (deve coincidir com uma `area` de `professores.csv`) |
 | `ano` | ano da matriz (1, 2, 3…) |
 | `tipo` | `anual` ou `semestral` |
-| `semestre` | `1` ou `2` — para *anual*, indica em qual semestre; *semestral* conta nos dois |
+| `semestre` | `1` ou `2` |
 | `ch` | carga horária do componente, em hora-aula |
 | `turmas` | nº de turmas ofertadas |
-| `professores` | nº de professores no componente (co-docência) |
+| `professores` | nº de professores no componente |
 
-> **Atenção ao join por área.** Se a `area` de uma disciplina não existir em `professores.csv`,
-> a carga dela entra no total do curso, mas a área **não aparece** nos gráficos por área (sem
-> docentes para dividir). Disciplinas com `area` em branco ficam de fora da visão por área.
-
----
-
-## Como atualizar e publicar
-
-Tudo é gerado por um script Python a partir dos dois CSVs.
-
-```bash
-# 1. edite professores.csv e/ou disciplinas.csv
-# 2. regenere a página
-python3 gerar_dashboard.py     # sobrescreve index.html
-
-# 3. publique (só o index.html é versionado)
-git add index.html
-git commit -m "Atualiza projeção"
-git push
-```
-
-O GitHub Pages atualiza a página no ar em seguida.
-
-> Antes de publicar, dá para conferir localmente: é só abrir o `index.html` no navegador
-> (duplo clique). Ele funciona offline, sem servidor.
+A simulação acontece **apenas no seu navegador** — nada é enviado nem altera a página que
+os outros veem.
 
 ---
 
-## Estrutura do repositório
+## Dúvidas
 
-Só o **`index.html`** (e este README) são versionados. Os dados de origem, a planilha,
-os PPCs e o gerador ficam **fora do controle de versão** (ver `.gitignore`) — são a base
-de trabalho local, não o produto publicado.
-
-| Arquivo | Papel | Versionado? |
-|---|---|---|
-| `index.html` | painel publicado (gerado) | ✅ sim |
-| `gerar_dashboard.py` | gerador: CSVs → `index.html` | 🚫 local |
-| `professores.csv`, `disciplinas.csv` | dados de origem | 🚫 local |
-| `Projeções.xlsx` | planilha de trabalho das projeções | 🚫 local |
-| `*.pdf` | PPCs dos cursos e grades de horário | 🚫 local |
-
-### Ajustes rápidos no gerador
-No topo de `gerar_dashboard.py`:
-- `COORD_RED` — horas semanais de redução por coordenador (padrão 8).
-
-Os limites do semáforo (12 e 18) estão na função `situ(...)` dentro do template, e o texto
-de referência correspondente fica no rodapé (`<footer>`).
+Para esclarecimentos sobre os dados ou a metodologia, procure a **Coordenação Geral de
+Ensino — IFB Campus Estrutural**.

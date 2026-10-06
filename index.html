@@ -437,7 +437,8 @@ const stEl=document.getElementById('simStatus');
 function setStatus(msg,cls){stEl.textContent=msg;stEl.className=cls||'';}
 function readFile(input,cb){const f=input.files&&input.files[0];if(!f)return;
   const r=new FileReader();r.onload=()=>{try{cb(parseCSV(String(r.result)));}catch(err){setStatus('Erro ao ler o CSV: '+err.message,'err');}};
-  r.onerror=()=>setStatus('Não consegui ler o arquivo.','err');r.readAsText(f,'utf-8');}
+  r.onerror=()=>setStatus('Não consegui ler o arquivo.','err');r.readAsText(f,'utf-8');
+  input.value='';} /* limpa o campo: reenviar o mesmo arquivo (editado) dispara onchange de novo */
 document.getElementById('fProf').onchange=e=>readFile(e.target,rows=>{curProf=rows;recompute();
   setStatus(`Professores carregado ✓ — ${D.areas.length} área(s), ${D.totais.docentes} docentes.`,'ok');});
 document.getElementById('fDisc').onchange=e=>readFile(e.target,rows=>{curDisc=rows;resetCourses();
